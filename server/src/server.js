@@ -8,7 +8,6 @@ app.use(express.json()); // support json encoded bodies
 
 app.use("/api/", apiRoute);
 
-const CONNECTION_URL = 'mongodb+srv://adminKC:KarmaCircles@cluster0.tf8rc.mongodb.net/?retryWrites=true&w=majority'
 const CONNECTION_URL1 = 'mongodb://localhost:27017/emailDB'; // Local test database.
 const PORT = process.env.PORT || 8000;
 
