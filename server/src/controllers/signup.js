@@ -92,4 +92,34 @@ async function verify_user(req,res) {
     else res.status(403).send("Invalid OTP");
 }
 
-module.exports = { signup_user, verify_user }
+async function delete_user(req,res) {
+    const email = req.data.email;
+    const id = req.data.user_id;
+
+    if(!email) {
+        res.status(400).send("Email is invalid");
+        return;
+    }
+
+    if(!id || !mongoose.Types.ObjectId.isValid(id)) {
+        res.status(400).send("Email is invalid");
+        return; 
+    }
+
+    const user = User.findById(id);
+    if(!user) {
+        res.status(404).send("No such user");
+        return;
+    }
+
+    const sub = Subscriber.findOne({email: email, subscribed_to: id});
+    if(!sub) {
+        res.status(404).send("You are not subscribed");
+        return;
+    }
+
+    sub.delete();
+    res.status(404).send("Successfully unsubscribed");
+}
+
+module.exports = { signup_user, verify_user, delete_user}
