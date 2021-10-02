@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
+import { useLocation, useParams } from "react-router";
 import './UserPage.css';
 
 const UserPage = (props) => {
@@ -12,9 +13,10 @@ const UserPage = (props) => {
     const [name, setName] = useState("");
     const [message, setMessage] = useState("");
 
+    const {company_id} = useParams();
+
     useEffect(() => {
-        const path = props.location.pathname;
-        setCompanyID(path.substr(1, path.length));
+        setCompanyID(company_id);
     }, [])
 
     function validateEmail(email) {
