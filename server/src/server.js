@@ -1,8 +1,10 @@
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const apiRoute = require('./routes/api');
 const app = express();
 
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); // support json encoded bodies
 

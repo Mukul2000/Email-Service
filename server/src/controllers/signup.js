@@ -87,8 +87,9 @@ async function verify_user(req,res) {
     if(key === subscriber.key) {
         subscriber.is_verified = true;
         subscriber.subscribed_on = new Date();
+        res.status(200).send("User verified successfully");
     }
-    res.send("User verified successfully");
+    else res.status(403).send("Invalid OTP");
 }
 
 module.exports = { signup_user, verify_user }
