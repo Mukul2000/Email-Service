@@ -1,6 +1,8 @@
 const url = require('url');
 const User = require('../schemas/User');
 const Subscriber = require('../schemas/Subscriber');
+const send_email = require('../utils/send_email')
+const mongoose = require('mongoose');
 
 async function signup_user(req, res) {
     queryObject = url.parse(req.url, true).query
@@ -11,7 +13,7 @@ async function signup_user(req, res) {
         res.status(400).json({error: 'email is invalid'});
         return;
     }
-    if(!user_id) {
+    if(!user_id || !mongoose.Types.ObjectId.isValid(user_id)) {
         res.status(400).json({error: 'user_id is invalid'});
         return;
     }
@@ -30,7 +32,7 @@ async function signup_user(req, res) {
         if(exists != null) throw "Already subscribed"; 
 
         // add subscriber
-        const subscriber = await Subscriber.create({
+        const subscriber = new Subscriber({
             email: email,
             name: name,
             subscribed_to: user._id,
@@ -42,7 +44,7 @@ async function signup_user(req, res) {
         });
 
         // send OTP        
-        
+        Promise.all([subscriber.save(), send_email(email)]);
 
         res.status(200).send("OTP has been sent");
         
@@ -55,4 +57,38 @@ async function signup_user(req, res) {
 
 }
 
-module.exports = { signup_user }
+async function verify_user(req,res) {
+    const email = req.data.email;
+    const id = req.data.user_id;
+    const key = req.data.otp;
+
+    if(!email) {
+        res.status(400).send("Email is invalid");
+        return;
+    }
+
+    if(!id || !mongoose.Types.ObjectId.isValid(id)) {
+        res.status(400).send("Email is invalid");
+        return; 
+    }
+
+    const user = User.findById(id);
+    if(!user) {
+        res.status(404).send("No such user");
+        return;
+    }
+
+    const subscriber = Subscriber.findOne({email: email});
+    if(!subscriber) {
+        res.status(404).send("Email not in database");
+        return;
+    }
+
+    if(key === subscriber.key) {
+        subscriber.is_verified = true;
+        subscriber.subscribed_on = new Date();
+    }
+    res.send("User verified successfully");
+}
+
+module.exports = { signup_user, verify_user }
