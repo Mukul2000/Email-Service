@@ -32,6 +32,7 @@
 }
 
 #warning {
+    margin: 4px 0px;
     color: red;
     font-size: 15px;
 }

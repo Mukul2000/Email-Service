@@ -46,6 +46,7 @@ async function signup_user(req, res) {
         });
 
         // send OTP        
+        // if email is not sent subscriber is not saved. NEAT.
         Promise.all([subscriber.save(), send_email(email)]);
 
         res.status(200).send("OTP has been sent");
