@@ -1,21 +1,21 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-import { Redirect } from "react-router";
+import { Redirect, useHistory } from "react-router";
 import './LoginPage.css';
 
 const LoginPage = (props) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [warning, setWarning] = useState("");
-    const [loggedIn, setLoggedIn] = useState(false);
+    const history = useHistory();
 
     useEffect(() => {
-        if (localStorage.getItem('user')) {
-            setLoggedIn(true);
-            alert("You are already logged in!");
+        const user = localStorage.getItem('user')
+        if (user) {
+            history.push('/dashboard');
         }
-    }, []);
+    });
 
     function validateEmail(email) {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -39,7 +39,6 @@ const LoginPage = (props) => {
             setWarning("Invalid email or password");
         }
     }
-    if(loggedIn) return <Redirect to='/dashboard'/>
 
     return (
         <div className='main-wrapper'>
