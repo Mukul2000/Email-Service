@@ -2,16 +2,15 @@ const mongoose = require('mongoose');
 
 const templateSchema = mongoose.Schema({
     email: {
-        required: true,
         subject: String,
         body: String, 
     },
-    owner: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    created_at: new Date()
+    created_at: Date
 });
 
-const User = mongoose.model("User", templateSchema);
-module.exports = User;
+const Template = mongoose.model('templates', templateSchema);
+module.exports = Template;

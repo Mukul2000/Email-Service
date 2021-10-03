@@ -1,18 +1,17 @@
 const mongoose = require('mongoose');
 
 const historySchema = mongoose.Schema({
-    sender: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User'
     },
     email: {
-        required: true,
         subject: String,
         body: String,
     },
-    sent_at: new Date()
+    sent_at: Date,
 });
 
-const History = mongoose.model("History", historySchema);
+const History = mongoose.model('history', historySchema);
 module.exports = History;

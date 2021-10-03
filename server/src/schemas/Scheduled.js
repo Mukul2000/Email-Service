@@ -2,19 +2,17 @@ const mongoose = require('mongoose');
 
 const scheduledSchema = mongoose.Schema({
     email: {
-        required: true,
         subject: String,
         body: String
     },
-    sender: {
-        required: true,
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
     recurrence: String,
-    next_send_date: new Date(),
-    created_at: new Date()
+    next_send_date: Date,
+    created_at: Date
 });
 
-const Scheduled = mongoose.model("Scheduled", scheduledSchema);
+const Scheduled = mongoose.model('scheduled', scheduledSchema);
 module.exports = Scheduled;

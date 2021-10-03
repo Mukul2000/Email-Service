@@ -9,7 +9,7 @@ const subscriberSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    subscribed_to: {
+    user: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User'
     },
