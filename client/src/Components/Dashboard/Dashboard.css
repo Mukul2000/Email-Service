@@ -1,0 +1,17 @@
+.outer-wrapper {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    height: 100%;
+}
+
+.content-wrapper {
+    padding: 10px;
+}
+
+.table-link {
+    margin: 10px 2px;
+    padding: 5px;
+    margin-left: 50px;
+    width: 10%;
+}
