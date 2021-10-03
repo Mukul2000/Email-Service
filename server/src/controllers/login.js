@@ -20,7 +20,7 @@ async function login(req, res) {
     catch(e) {
         console.log(e);
         res.status(404).json({
-            errors: e,
+            error: e,
         });
     }
 }
