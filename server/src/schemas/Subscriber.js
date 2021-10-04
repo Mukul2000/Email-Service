@@ -15,7 +15,7 @@ const subscriberSchema = mongoose.Schema({
     },
     total_emails_sent: Number,
     successful_emails_sent: Number,
-    key: Number,
+    key: String,
     is_verified: Boolean,
     subscribed_on: Date, 
 });

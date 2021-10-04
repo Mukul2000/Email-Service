@@ -11,6 +11,7 @@ const UserPage = (props) => {
     const [OTP, setOTP] = useState("");
     const [name, setName] = useState("");
     const [message, setMessage] = useState("");
+    const [done, setDone] = useState(false);
     const {company_id} = useParams();
 
 
@@ -33,24 +34,26 @@ const UserPage = (props) => {
                 console.log(response);
                 if (response.status === 200) {
                     // proceed to verify user 
-                    setMessage(response.data);
+                    setMessage(response.data.message);
                     setShowOTP(true);
                 }
-                else setWarning(response.data);
             }
             catch (e) {
-                setWarning(e.response.error);
+                console.log(e);
+                setWarning(e.error);
             }
         }
     }
 
     async function verifyOTP() {
         try {
-            const response = await axios.post('localhost:8000/api/signup', { email: email, user_id: company_id, otp: OTP });
-            if (response.status === 200) setWarning(response)
-            else setWarning("Something went wrong");
+            const response = await axios.post('http://localhost:8000/api/signup', { email: email, user_id: company_id, otp: OTP });
+            console.log(response.data);
+            setMessage(response.data.message)
+            setDone(true);
         }
         catch (e) {
+            console.log(e.error);
             setWarning("Something went wrong");
         }
     }
@@ -59,7 +62,8 @@ const UserPage = (props) => {
         <div className='main-wrapper'>
             <div className='details-box'>
                 Subscribe to our feature updates!
-                {!showOTP && <div id='input-field'>
+                {done && {message}}
+                {!showOTP && !done && <div id='input-field'>
                     <div>
                         <input
                             type="text"
@@ -73,8 +77,8 @@ const UserPage = (props) => {
                         <input type="text" value={name} placeholder='Your name' onChange={(e) => setName(e.target.value)} />
                     </div>
                 </div>}
-                {showOTP && <div id='input-field'><input placeholder='Enter OTP' type="text" value={OTP} onChange={(e) => setOTP(e.target.value)} /></div>}
-                {showOTP && <Button onClick={verifyOTP}>Verify</Button>}
+                {showOTP && !done && <div id='input-field'><input placeholder='Enter OTP' type="text" value={OTP} onChange={(e) => setOTP(e.target.value)} /></div>}
+                {showOTP && !done && <Button onClick={verifyOTP}>Verify</Button>}
                 <div id='warning'>
                     {warning}
                 </div>
