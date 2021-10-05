@@ -4,6 +4,7 @@ const History = require('../schemas/History');
 const Scheduled = require('../schemas/Scheduled');
 const Subscriber = require('../schemas/Subscriber');
 const Template = require('../schemas/Templates');
+const User = require('../schemas/User');
 
 async function fetch_table(req, res) {
 
@@ -28,40 +29,84 @@ async function fetch_table(req, res) {
     const result = {};
     const limit = page * page_size;
     const offset = limit - page_size;
-    
+    const user = req.user;
+
     if (table_name === 'subscribers') {
         if (record_id) data = await Subscriber.findById(record_id);
         else {
-            const data = await Subscriber.find({is_verified: true}).limit(limit).skip(offset);
+            const data = await Subscriber.find({ user: user, is_verified: true }).limit(limit).skip(offset);
             result.data = data;
             result.table_headers = ['email', 'name', 'total_emails_sent', 'successful_emails_sent', 'subscribed_on'];
         }
     }
     else if (table_name === 'history') {
-        if(record_id) data = await History.findById(record_id);
+        if (record_id) data = await History.findById(record_id);
         else {
-            const data = await History.find().limit(limit).skip(offset);            
+            const data = await History.find().limit(limit).skip(offset);
             result.data = data;
             result.table_headers = ['email', 'sent_at'];
         }
     }
     else if (table_name === 'scheduled') {
-         if(record_id) data = await Scheduled.findById(record_id);
+        if (record_id) data = await Scheduled.findById(record_id);
         else {
-            const data = await Scheduled.find().limit(limit).skip(offset);            
+            const data = await Scheduled.find().limit(limit).skip(offset);
             result.data = data;
             result.table_headers = ['email', 'recurrence', 'next_send_date'];
         }
     }
     else if (table_name === 'templates') {
-          if(record_id) data = await Template.findById(record_id);
+        if (record_id) data = await Template.findById(record_id);
         else {
-            const data = await Template.find().limit(limit).skip(offset);            
+            const data = await Template.find().limit(limit).skip(offset);
             result.data = data;
             result.table_headers = ['email', 'created_at'];
-        }       
+        }
     }
     res.status(200).json({ result });
 }
 
-module.exports = { fetch_table }
+async function get_templates(req, res) {
+    const user = req.user;
+    try {
+        const user_data = await User.findOne(user);
+        console.log(user_data._id.toString());
+        if (user_data === null) {
+            res.status(404);
+            throw 'No such user';
+        }
+        const templates = await Template.find({user: user_data._id.toString()});
+        res.status(200).json({templates})
+    }
+    catch (e) {
+        res.json({ error: e });
+    }
+}
+
+async function create_template(req, res) {
+    const {email} = req.user;
+    const subject = req.body.subject;
+    const body = req.body.body;
+    try {
+        const user = await User.findOne({email: email});
+        if(user === null) {
+            res.status(404);
+            throw 'no such user';
+        }
+
+        const template = await Template.create({
+            user: user._id,
+            email: {
+                subject: subject,
+                body: body,
+            },
+            created_at: Date.now()
+        });
+        res.status(200).json({message: "Succesfully created template"});
+    }
+    catch(e) {
+        res.json({error: e});
+    }
+}
+
+module.exports = {fetch_table, get_templates, create_template}

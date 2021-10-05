@@ -15,5 +15,6 @@ route.post('/login', login_controllers.login)
 
 route.get('/user_tables/:table_name', authByToken, data_controllers.fetch_table);
 route.get('/user_templates', authByToken, data_controllers.get_templates);
+route.post('/user_templates', authByToken, data_controllers.create_template);
 
 module.exports = route;
