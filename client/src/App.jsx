@@ -5,6 +5,7 @@ import LoginPage from './Components/LoginPage/LoginPage'
 import Lost from './Components/Lost'
 import Dashboard from './Components/Dashboard/Dashboard';
 import TableDetail from './Components/TableDetail/TableDetail';
+import SendEmail from './Components/SendEmail/SendEmail';
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
     <BrowserRouter>
       <Switch>
         <Route path='/user_tables/:table_name' onEnter={requireAuth} component={TableDetail}/>
+        <Route path='/dashboard/send_email' onEnter={requireAuth} component={SendEmail}/>
         <Route path='/dashboard' onEnter={requireAuth} component={Dashboard} />
         <Route path='/login' exact component={LoginPage}></Route>
         <Route path='/subscribe/:company_id' component={UserPage}></Route>
