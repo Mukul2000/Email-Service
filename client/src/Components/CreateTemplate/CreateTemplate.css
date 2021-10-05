@@ -1,0 +1,13 @@
+.input-area {
+    align-items: center;
+    padding: 2px;
+}
+
+input {
+    width: 800px;
+}
+
+textarea {
+    width: 1000px;
+    height: 400px;
+}

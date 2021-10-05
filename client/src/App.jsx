@@ -6,6 +6,7 @@ import Lost from './Components/Lost'
 import Dashboard from './Components/Dashboard/Dashboard';
 import TableDetail from './Components/TableDetail/TableDetail';
 import SendEmail from './Components/SendEmail/SendEmail';
+import CreateTemplate from './Components/CreateTemplate/CreateTemplate';
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
     <BrowserRouter>
       <Switch>
         <Route path='/user_tables/:table_name' onEnter={requireAuth} component={TableDetail}/>
+        <Route path='/dashboard/create_template' onEnter = {requireAuth} component={CreateTemplate}/>
         <Route path='/dashboard/send_email' onEnter={requireAuth} component={SendEmail}/>
         <Route path='/dashboard' onEnter={requireAuth} component={Dashboard} />
         <Route path='/login' exact component={LoginPage}></Route>
