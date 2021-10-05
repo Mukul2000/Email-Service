@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const templateSchema = mongoose.Schema({
+    name: String,
     email: {
         subject: String,
         body: String, 
