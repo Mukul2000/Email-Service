@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const historySchema = mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'User'
+        ref: 'users'
     },
     email: {
         subject: String,

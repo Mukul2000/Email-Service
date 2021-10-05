@@ -7,7 +7,7 @@ const scheduledSchema = mongoose.Schema({
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'users'
     },
     recurrence: String,
     next_send_date: Date,

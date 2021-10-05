@@ -11,7 +11,7 @@ const subscriberSchema = mongoose.Schema({
     },
     user: {
         type: mongoose.Schema.Types.ObjectId, 
-        ref: 'User'
+        ref: 'users'
     },
     total_emails_sent: Number,
     successful_emails_sent: Number,

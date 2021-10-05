@@ -5,6 +5,21 @@ const send_email = require('../utils/send_email')
 const mongoose = require('mongoose');
 const generate_key = require('../utils/utils');
 
+async function create_account(req, res) {
+    const { name, email, password } = req.body;
+    try {
+        await User.create({
+            name: name,
+            email: email,
+            password: password
+        });
+        res.status(200).json({ message: "Successful" })
+    }
+    catch (e) {
+        res.status(500).json({ error: e });
+    }
+}
+
 async function signup_user(req, res) {
     queryObject = url.parse(req.url, true).query
     const email = queryObject.email;
@@ -32,26 +47,27 @@ async function signup_user(req, res) {
         // check if this email exists for this user or not
         const exists = await Subscriber.findOne({ subscribed_to: user_id, email: email });
         if (exists != null) {
-            if(exists.is_verified == true) throw 'Already subscribed';
+            if (exists.is_verified == true) throw 'Already subscribed';
             else {
-                await Subscriber.deleteOne({subscribed_to: user_id, email: email});
+                await Subscriber.deleteOne({ subscribed_to: user_id, email: email });
             }
-        } 
+        }
 
         // Generate key        
-        
+
         try {
-            
+
             const key = generate_key();
             console.log(key);
-            console.log(typeof(key)); 
-            
+            console.log(typeof (key));
+
             // add subscriber
             const subscriber = await Subscriber.create({
                 email: email,
                 name: name,
                 subscribed_to: user._id,
                 total_emails_sent: 0,
+                user: user._id,
                 successful_emails_sent: 0,
                 key: key,
                 is_verified: false,
@@ -96,7 +112,7 @@ async function verify_user(req, res) {
         return;
     }
 
-    if(!key) {
+    if (!key) {
         res.status(400).json({ error: "OTP field is invalid" });
         return;
     }
@@ -112,15 +128,15 @@ async function verify_user(req, res) {
         res.status(404).json({ error: "Email not in database" });
         return;
     }
-    if(subscriber.is_verified === true) {
-        res.status(403).json({error: 'Already verified'});
+    if (subscriber.is_verified === true) {
+        res.status(403).json({ error: 'Already verified' });
         return;
     }
     if (key === subscriber.key) {
-        await Subscriber.updateOne({email: email}, {is_verified: true, subscribed_on: new Date()});
-        res.status(200).json({message: "User verified successfully"});
+        await Subscriber.updateOne({ email: email }, { is_verified: true, subscribed_on: new Date() });
+        res.status(200).json({ message: "User verified successfully" });
     }
-    else res.status(403).json({error: "Invalid OTP"});
+    else res.status(403).json({ error: "Invalid OTP" });
 }
 
 async function delete_user(req, res) {
@@ -153,4 +169,4 @@ async function delete_user(req, res) {
     res.status(404).send("Successfully unsubscribed");
 }
 
-module.exports = { signup_user, verify_user, delete_user }
+module.exports = { signup_user, verify_user, delete_user, create_account}
