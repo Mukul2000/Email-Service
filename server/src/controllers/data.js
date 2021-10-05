@@ -29,12 +29,15 @@ async function fetch_table(req, res) {
     const result = {};
     const limit = page * page_size;
     const offset = limit - page_size;
-    const user = req.user;
+    const email = req.user.email;
+    
+    const user = await User.findOne({email: email})
+    console.log(user);
 
     if (table_name === 'subscribers') {
         if (record_id) data = await Subscriber.findById(record_id);
         else {
-            const data = await Subscriber.find({ user: user, is_verified: true }).limit(limit).skip(offset);
+            const data = await Subscriber.find({ user: user._id.toString(), is_verified: true }).limit(limit).skip(offset);
             result.data = data;
             result.table_headers = ['email', 'name', 'total_emails_sent', 'successful_emails_sent', 'subscribed_on'];
         }
@@ -60,7 +63,7 @@ async function fetch_table(req, res) {
         else {
             const data = await Template.find().limit(limit).skip(offset);
             result.data = data;
-            result.table_headers = ['email', 'created_at'];
+            result.table_headers = ['name', 'email', 'created_at'];
         }
     }
     res.status(200).json({ result });
@@ -85,6 +88,7 @@ async function get_templates(req, res) {
 
 async function create_template(req, res) {
     const {email} = req.user;
+    const name = req.body.name;
     const subject = req.body.subject;
     const body = req.body.body;
     try {
@@ -95,6 +99,7 @@ async function create_template(req, res) {
         }
 
         const template = await Template.create({
+            name: name,
             user: user._id,
             email: {
                 subject: subject,
