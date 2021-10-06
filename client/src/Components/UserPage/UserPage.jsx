@@ -62,7 +62,6 @@ const UserPage = (props) => {
         <div className='main-wrapper'>
             <div className='details-box'>
                 Subscribe to our feature updates!
-                {done && {message}}
                 {!showOTP && !done && <div id='input-field'>
                     <div>
                         <input
@@ -82,7 +81,7 @@ const UserPage = (props) => {
                 <div id='warning'>
                     {warning}
                 </div>
-                {message}
+                {done && message}
                 {!showOTP && <Button onClick={onSubmit}>Submit!</Button>}
             </div>
         </div>

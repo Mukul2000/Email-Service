@@ -62,7 +62,7 @@ async function signup_user(req, res) {
             console.log(typeof (key));
 
             // add subscriber
-            const subscriber = await Subscriber.create({
+            const subscriber = Subscriber.create({
                 email: email,
                 name: name,
                 subscribed_to: user._id,
@@ -73,7 +73,7 @@ async function signup_user(req, res) {
                 is_verified: false,
                 subscribed_on: null
             });
-            await send_email(email, key);
+            Promise.all([send_email(user.email, email, "Verify your account", `Your OTP is ${key}`, `Your OTP is <b> ${key} </b>`), subscriber]);
             res.status(200).json({
                 "message": "OTP has been sent",
             });
