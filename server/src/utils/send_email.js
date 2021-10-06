@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 
-async function send_email(email, key) {
+async function send_email(from, receiver_list, subject, text, html) {
     const transporter = nodemailer.createTransport({
         host: 'smtp.ethereal.email',
         port: 587,
@@ -12,11 +12,11 @@ async function send_email(email, key) {
 
     // send mail with defined transport object
     let info = await transporter.sendMail({
-        from: "abcd@g.com", // sender address
-        to: email, // list of receivers
-        subject: "Your Subscription", // Subject line
-        text: `Your OTP is ${key}`, // plain text body
-        html: `<b>Your OTP is ${key}</b>`, // html body
+        from: from, // sender address
+        to: receiver_list, // list of receivers
+        subject: subject, // Subject line
+        text: text, // plain text body
+        html: html, // html body
     });
 
     console.log("Message sent: %s", info.messageId);
