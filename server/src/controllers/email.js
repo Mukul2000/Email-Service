@@ -29,7 +29,6 @@ async function handle_email_send(req, res) {
         const subscribers = await Subscriber.find({ user: user._id.toString(), is_verified: true });
         const receiver_emails = [];
         subscribers.forEach(item => receiver_emails.push(item.email));
-        console.log(receiver_emails);
 
         if (is_scheduled) {
             const recur_states = ['Daily', 'Weekly', 'Monthly'];
@@ -59,7 +58,22 @@ async function handle_email_send(req, res) {
                 },
                 sent_at: Date.now()
             })
-            Promise.all([send_email(email, receiver_emails, subject, body, body), historyEntry]);
+            const d = await Promise.all([send_email(email, receiver_emails, subject, body, body), historyEntry]);
+            const rejected = d[0];
+
+            // update total sent emails and delivered emails for each sub
+            subscribers.forEach(async (sub) => {
+                const good_sent = sub.successful_emails_sent;
+                const total_sent = sub.total_emails_sent;
+                if (!rejected.find(item => item === sub.email)) {
+                    await Subscriber.findOneAndUpdate({ _id: sub._id }, { $set: { total_emails_sent: total_sent + 1, successful_emails_sent: good_sent + 1 } });
+                }
+                else {
+                    await Subscriber.findOneAndUpdate({ _id: sub._id }, { $set: { total_emails_sent: total_sent + 1, successful_emails_sent: good_sent } });
+                }
+            });
+
+
         }
         res.status(200).json({ message: "Emails sent successfully" });
 

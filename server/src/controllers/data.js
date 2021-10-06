@@ -47,7 +47,7 @@ async function fetch_table(req, res) {
         else {
             const data = await History.find().limit(limit).skip(offset);
             result.data = data;
-            result.table_headers = ['email', 'sent_at'];
+            result.table_headers = ['sent_at'];
         }
     }
     else if (table_name === 'scheduled') {
@@ -63,7 +63,7 @@ async function fetch_table(req, res) {
         else {
             const data = await Template.find().limit(limit).skip(offset);
             result.data = data;
-            result.table_headers = ['name', 'email', 'created_at'];
+            result.table_headers = ['name', 'created_at'];
         }
     }
     res.status(200).json({ result });

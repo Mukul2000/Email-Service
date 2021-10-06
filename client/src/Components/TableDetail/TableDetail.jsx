@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import axios from 'axios';
 import { getAuthHeader } from "../utils/authutils";
 import {Table, Button} from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 function TableDetail(props) {
     const [data, setData] = useState([]);
@@ -49,7 +50,14 @@ function TableDetail(props) {
                         <tr key={t._id}>
                         {
                             headers.map(property => {
-                                return <td> {t[property]} </td>
+                                if((table_name === 'templates' && property=== 'name') || (table_name === 'history' && property === 'sent_at')) return <Link to={{
+                                    pathname: '/detail',
+                                    state: {
+                                        subject: t['email']['subject'],
+                                        body: t['email']['body']
+                                    }
+                                }} key={property}> <td> {t[property]} </td> </Link>
+                                else return  <td key={property}> {t[property]} </td> 
                             })
                         }
                         </tr>

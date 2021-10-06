@@ -19,11 +19,11 @@ async function send_email(from, receiver_list, subject, text, html) {
         html: html, // html body
     });
 
+    const { rejected } = info;
+    return rejected;
+
     console.log("Message sent: %s", info.messageId);
     // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-    // Preview only available when sending through an Ethereal account
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 }
 
 module.exports = send_email;
