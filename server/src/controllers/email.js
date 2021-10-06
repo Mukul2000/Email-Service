@@ -26,7 +26,7 @@ async function handle_email_send(req, res) {
             throw 'No such user';
         }
 
-        const subscribers = await Subscriber.find({ user: user._id.toString() });
+        const subscribers = await Subscriber.find({ user: user._id.toString(), is_verified: true });
         const receiver_emails = [];
         subscribers.forEach(item => receiver_emails.push(item.email));
         console.log(receiver_emails);
