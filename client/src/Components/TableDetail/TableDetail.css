@@ -1,13 +1,5 @@
-.container {
-    padding: 10px;
-    margin-top: 10px;
-}
-
-.table {
-    padding: 10px;
-}
-
-.page-counter {
-    margin: 0px 5px;
-    display: inline;
+.table-header {
+    font-weight: normal;
+    font-size: 0.9em;
+    color: #17007c;
 }

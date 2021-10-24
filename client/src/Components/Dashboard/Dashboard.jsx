@@ -2,19 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 import NavigationBar from "../NavigationBar/NavigationBar";
 import './Dashboard.css';
+import TableDetail from '../TableDetail/TableDetail';
 
 function Dashboard(props) {
-    const [name, setName] = useState("");
+    const [name, setName] = useState(JSON.parse(localStorage.getItem('user')).name);
     const [activeTab, setActiveTab] = useState(0);
 
 
     const tables = [['Subscribers', 'subscribers', 'fas fa-home'], ['History', 'history', 'fas fa-history'],
     ['Scheduled', 'scheduled', 'fas fa-calendar-alt'], ['Templates', 'templates', 'fas fa-book-open']];
-
-    useEffect(() => {
-        const name = JSON.parse(localStorage.getItem('user')).name;
-        setName(name);
-    }, [])
 
     return (
         <div className='outer-wrapper'>
@@ -42,7 +38,10 @@ function Dashboard(props) {
                     })}
                 </div>
                 <div className='tab-data'>
-                    {activeTab}
+                    {activeTab==0 && <TableDetail table_name = 'subscribers'/>}
+                    {activeTab==1 && <TableDetail table_name = 'history'/>}
+                    {activeTab==2 && <TableDetail table_name = 'scheduled'/>}
+                    {activeTab==3 && <TableDetail table_name = 'templates'/>}
                 </div>
             </div>
         </div>

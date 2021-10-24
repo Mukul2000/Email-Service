@@ -32,7 +32,6 @@ async function fetch_table(req, res) {
     const email = req.user.email;
     
     const user = await User.findOne({email: email})
-    console.log(user);
 
     if (table_name === 'subscribers') {
         if (record_id) data = await Subscriber.findById(record_id);
@@ -66,7 +65,9 @@ async function fetch_table(req, res) {
             result.table_headers = ['name', 'created_at'];
         }
     }
-    res.status(200).json({ result });
+    const data = result.data;
+    const headers = result.table_headers;
+    res.status(200).json({data,headers});
 }
 
 async function get_templates(req, res) {
