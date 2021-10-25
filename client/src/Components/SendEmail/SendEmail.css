@@ -5,9 +5,13 @@
 
 input {
     width: 800px;
+    border-radius: 5px;
+    border-style: solid;
 }
 
 textarea {
     width: 1000px;
+    border-radius: 5px;
+    border-style: solid; 
     height: 400px;
 }

@@ -20,7 +20,7 @@ function DropDown(props) {
 
     return (
         <Dropdown>
-            <Dropdown.Toggle variant="Secondary" id="dropdown-basic">
+            <Dropdown.Toggle variant="success" id="dropdown-basic">
                 {display}
             </Dropdown.Toggle>
 

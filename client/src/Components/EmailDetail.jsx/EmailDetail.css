@@ -1,0 +1,10 @@
+.subject {
+    padding: 10px;
+    background-color: white;
+    font-weight: bold;
+}
+
+.body {
+    padding: 10px;
+    background-color: white;
+}
